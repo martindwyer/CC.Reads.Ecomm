@@ -1,0 +1,75 @@
+﻿@*
+Filename:  Details.cshtml
+Purpose:   View for displaying details for Company objects
+Contains:  Model, ViewData for page title, Layout specification, Html, asp tag helpers, JavaScript
+Author:    Martin Dwyer
+Created:   2022-08-17
+Last Edit: 2022-08-22
+By:        Martin Dwyer
+*@
+
+@model CC.Reads.Models.Company
+
+@{
+    ViewData["Title"] = "Company Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+
+    <h1 class="mt-5">@ViewData["Title"]</h1>
+
+    <div>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Id)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Id)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.StreetAddress)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.StreetAddress)
+            </dd>
+
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.City)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.City)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.State)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.State)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.PostalCode)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.PostalCode)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.PhoneNumber)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.PhoneNumber)
+            </dd>
+
+        </dl>
+    </div>
+    <div>
+        <a asp-action="Upsert" asp-route-id="@Model?.Id" class="btn btn-primary">Edit</a> &nbsp;
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    </div>
+</div>

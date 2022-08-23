@@ -1,0 +1,125 @@
+﻿@*
+Filename:  Index.cshtml
+Purpose:   View for displaying all Products to shoppers. 
+Contains:  Model, ViewData for page title, Layout specification, Html, asp tag helpers, JavaScript
+Author:    Martin Dwyer
+Created:   2022-08-17
+Last Edit: 2022-08-22
+By:        Martin Dwyer
+*@
+
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model IEnumerable<CC.Reads.Models.Product>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="container-fluid">
+    <div class="row">
+    <form method="get" asp-controller="Home" asp-action="Index" class="mt-2">
+        <div class="row site-nav">
+            <div class="col-md-3 tag-line" style="display:flex; align-items: center; justify-content: center;">
+                <h5 class="mt-2"><span class="logo-font">C</span>ontemporary <span class="logo-font">C</span>lassics</h5>
+            </div>
+
+            <div class="col-md-3 " id="product-search-box" style="display: flex; justify-content: center; align-items: center;">
+
+
+                <input placeholder="Search database" name="searchTerm" style="width:80%; height: 2rem; display: inline-block;" class="form-control" />
+                <button type="submit" class="btn btn-primary"><i class="fa-solid fa-magnifying-glass"></i></button>
+
+                <p id="searching-for" class="mb-3"></p>
+
+            </div>
+            <div class="col-md-3 sortAndFilter">
+                <p class="text-center mt-2">
+                    Sort by:&nbsp;
+                    <button type="submit" class="btn btn-secondary" name="sortBy" value="Price100">Price</button>&nbsp;
+                    <button type="submit" class="btn btn-secondary" name="sortBy" value="AuthorName">Author</button>&nbsp;
+                    <button type="submit" class="btn btn-secondary" name="sortBy" value="CoverType">Cover</button>&nbsp;
+
+                </p>
+            </div>
+            <div class="col-md-3 sortAndFilter">
+                <span>
+                    Filter Store:   &nbsp;
+                    <select name="filterBy" id="filterBy" class="form-control" style="width: 50%;display: inline-block;">
+                        <option selected value="">- category -</option>
+                        <option value="Fiction">Fiction</option>
+                        <option value="Non-Fiction">Non-Fiction</option>
+                        <option value="Autobiography">Autobiography</option>
+                        <option value="Biography">Biography</option>
+                        <option value="Fantasy">Fantasy</option>
+                        <option value="Romance">Romance</option>
+                        <option value="Documentary">Documentary</option>
+                    </select>
+                    <button type="submit" id="filterByButton" class="btn btn-secondary" name="sortBy" value="CoverType" style="visibility:hidden;">Go</button>
+                </span>
+            </div>
+
+        </div>
+    </form>
+    </div>
+    <div class="row">
+        <p class="text-center">
+        @if(TempData["searchTerm"] != null)
+        {
+            <span>Search results for "@TempData["searchTerm"]".&nbsp;</span>
+        }
+        @if(TempData["sortedBy"] != null)
+        {
+            <span>Sorted by "@TempData["sortedBy"]",&nbsp;</span>
+        }
+
+        @if(TempData["filteredBy"] != null)
+        {
+            <span>Filtered by "@TempData["filteredBy"]",&nbsp;</span>
+        }
+        </p>
+
+    </div>
+
+</div>
+<div class="container">
+    <div class="row pb-3">
+        @foreach (var product in Model)
+        {
+            <div class="col-lg-3 col-md-6">
+
+                <div class="row p-2">
+                    <div class="col-12 py-0 product-card">
+                        <div class="card">
+
+                            <img src="@product.ImageUrl" class="card-img-top rounded" style="max-height: 400px; width: auto;" />
+                            <div class="card-body">
+                                <div class="pl-1">
+                                    <p class="card-title h5 text-primary">@product.Title</p>
+                                    <p class="card-title text-info">@product.Author</p>
+                                </div>
+                                <div class="pl-1">
+                                    <p>List Price:  <strike><b>@product.ListPrice.ToString("0.00")</b></strike><br />
+                                    As low as:  <b>@product.Price100</b></p>
+                                    <p>Cover: @product.CoverType.Name</p>
+                                </div>
+                            </div>
+
+                            <div>
+
+                                <a asp-action="Details" asp-route-productId="@product.Id" class="btn btn-primary form-control">Details</a>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        }
+    </div>
+</div>
+
+
+@section Scripts {
+    <script src="~/js/home.js"></script>
+}

@@ -1,0 +1,32 @@
+﻿@using CC.Reads.Utility
+@model int?
+
+<style>
+    #cart {
+        position: relative;
+        margin-right: 3rem;
+
+    }
+
+    #cart i {
+        font-size: 2rem;
+        position: absolute;
+        top: 0;
+        left: 0;
+        
+    }
+
+    #cart-count {
+        z-index: 1000;
+        color: red;
+        position: absolute;
+        transform: translate(150%,-55%);
+        font-weight: 1000;
+
+    }
+
+
+</style>
+<div id="cart">
+    <i class="fa-solid fa-cart-shopping"></i> <span id="cart-count">&nbsp @(Model > 0 ? Model : "")</span> 
+</div>

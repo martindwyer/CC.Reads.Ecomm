@@ -1,0 +1,39 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using CC.Reads.Utility
+
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+    <div class="container-fluid">
+        <a class="navbar-brand logo-font" asp-area="Customer" asp-controller="Home" asp-action="Landing">CC</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarColor01" >
+
+
+            <ul class="navbar-nav me-auto" style="margin-right: 0 !important;">
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="Customer" asp-controller="Home" asp-action="Index">Shop</a>
+                </li>
+
+
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Customer" asp-controller="Cart" asp-action="Index">
+
+                            @await Component.InvokeAsync("ShoppingCart")
+                        </a>
+                    </li>
+                }
+            </ul>
+            
+            <partial name="_LoginPartial" />
+
+
+        </div>
+    </div>
+
+</nav>
