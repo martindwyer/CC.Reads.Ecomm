@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Stripe.Checkout;
 using System.Security.Claims;
+using Stripe;
 
 namespace CC.Reads.Areas.Admin.Controllers
 {
@@ -286,10 +287,30 @@ namespace CC.Reads.Areas.Admin.Controllers
         {
             // Retrieve the OrderHeader from the Db
             var orderHeaderFromDb = _unitOfWork.OrderHeader.GetFirstOrDefault(u => u.Id == Ovm.OrderHeader.Id);
+            
+            // Refund payment if made
+            if (orderHeaderFromDb.PaymentStatus == StaticConstants.PaymentStatusApproved)
+            {
+                var options = new RefundCreateOptions
+                {
+                    Reason = RefundReasons.RequestedByCustomer,
+                    PaymentIntent = orderHeaderFromDb.PaymentIntentId
+                };
 
-            // Update the OrderStatus to canceled
-            _unitOfWork.OrderHeader.UpdateStatus(orderHeaderFromDb.Id, StaticConstants.StatusCancelled,
-                StaticConstants.StatusCancelled);
+                var service = new RefundService();
+                Refund refund = service.Create(options);
+
+                _unitOfWork.OrderHeader.UpdateStatus(orderHeaderFromDb.Id, StaticConstants.StatusCancelled, StaticConstants.StatusRefunded);
+            }
+            else
+            {
+                // Update the OrderStatus to cancelled
+                _unitOfWork.OrderHeader.UpdateStatus(orderHeaderFromDb.Id, StaticConstants.StatusCancelled,
+                    StaticConstants.StatusCancelled);
+
+            }
+            
+            // Save changes to OrderHeader
             _unitOfWork.Save();
 
             // Send a message back to the user
